@@ -7,13 +7,15 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Middlewares
 app.use(express.json());
 
+// Configuração de CORS
 const corsOptions = {
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  optionsSuccessStatus: 200 // Para lidar com alguns navegadores antigos
+  optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
@@ -30,7 +32,7 @@ app.use((req, res, next) => {
   }
 });
 
-// Rota de saúde para teste
+// Rota de saúde
 app.get('/health', (req, res) => {
   res.status(200).send('API está funcionando corretamente');
 });
@@ -85,6 +87,7 @@ app.post('/register', async (req, res) => {
   }
 });
 
+// Rota de Login
 app.post('/login', async (req, res) => {
   console.log('Body recebido no /login:', req.body);
   const { username, password } = req.body;
