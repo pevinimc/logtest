@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    <!--CSS-->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/media.css">
+
+    <!--JS & jQuery-->
+    <script type="text/javascript" src="js/script.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="container">
+        <div class="banner">
+            <img src="img/login.png" alt="imagem-login">
+            <h1 align="center">Faça o login para obter acesso aos Exercícios Práticos!<br>Boa aula!</h1>
+        </div>
+
+        <div class="box-login">
+            <h1>Olá!<br> Seja bem-vindo de volta.</h1>
+
+            <div class="box">
+                <h2>Faça o login abaixo</h2>
+                <input type="text" name="usuario" id="usuario" placeholder="Usuário" required>
+                <input type="password" name="senha" id="senha" placeholder="Senha" required>
+
+                <button type="button" id="loginButton" class="mb-2 btn btn-primary">Entrar</button>
+
+                <a href="https://api.whatsapp.com/send/?phone=5567992362446&text=Olá%2C+eu+esqueci+meu+código+de+acesso+administrativo.+Consegue+verificar+para+mim%3F+Meu+nome+é%3A&type=phone_number&app_absent=0">
+                    <p>Esqueceu ou perdeu seu código de acesso?</p>
+                </a>
+
+                <a href="https://www.interativo.viacertacursos.com.br/portalAluno/#/login">
+                    <p>Voltar para o Portal do Aluno</p>
+                </a>
+
+                <!-- Novo link de acesso administrativo -->
+                <a href="painel/index.html">
+                    <p class="admin-link">Acesso Administrativo</p>
+                </a>
+
+                <div class="social"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Função para validar e enviar login
+        document.getElementById('loginButton').addEventListener('click', function() {
+            var usuario = document.getElementById('usuario').value;
+            var senha = document.getElementById('senha').value;
+
+            // Verifica se os campos não estão vazios
+            if (usuario === "" || senha === "") {
+                alert("Por favor, preencha todos os campos.");
+                return; // Se os campos estiverem vazios, sai da função
+            }
+
+            // Envio via AJAX para o servidor (a URL será apenas um exemplo)
+            fetch('https://www.seuservidor.com.br/admin/auth', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    usuario: usuario,
+                    senha: senha,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Verificando a resposta do servidor
+                if (data.success) {
+                    alert("Login bem-sucedido!");
+                    window.location.href = '/painel/index.html';  // Redireciona para o painel administrativo
+                } else {
+                    alert("Usuário ou senha incorretos.");
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao conectar com o servidor:', error);
+                alert("Erro ao conectar com o servidor.");
+            });
+        });
+    </script>
+</body>
+</html>

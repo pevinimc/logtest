@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Controle</title>
+
+    <!--CSS-->
+    <link rel="stylesheet" href="css/painel.css">
+    <link rel="stylesheet" href="css/media.css">
+
+    <!--JS & jQuery-->
+    <script type="text/javascript" src="js/script.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <script>
+        // Verificar se o código de administrador está armazenado no localStorage
+        var storedAdminCode = localStorage.getItem('admin_codigo');
+        var storedAdminPassword = localStorage.getItem('admin_senha');
+
+        // Se o código e a senha não estiverem armazenados, redirecionar para a página de login
+        if (!storedAdminCode || !storedAdminPassword) {
+            alert("Você precisa estar logado para acessar esta página.");
+            window.location.href = "/admin_login.html";  // Redireciona para a página de login
+        }
+    </script>
+
+    <!-- Menu Lateral -->
+    <div id="menu-lateral">
+        <div class="logo">
+            <h2>Painel de Controle</h2>
+        </div>
+        <ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="cadastro.html">Cadastro de Usuários</a></li>
+            <li><a href="index.html">Voltar</a></li>
+        </ul>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <div id="conteudo-principal">
+        <header>
+            <button id="menu-toggle" class="menu-toggle"><i class="fas fa-bars"></i></button>
+            <button class="logout" onclick="logout()">Sair</button> <!-- Botão de Logout -->
+        </header>
+
+        <!-- Dashboard -->
+        <section id="dashboard">
+            <h1>Bem-vindo ao Painel!</h1>
+            <p>Aqui você pode gerenciar o sistema, visualizar dados e adicionar novos usuários.</p>
+        </section>
+    </div>
+
+    <script>
+        // Função para realizar o logout
+        function logout() {
+            // Limpa as informações de login do localStorage
+            localStorage.removeItem('admin_codigo');
+            localStorage.removeItem('admin_senha');
+            
+            // Redireciona para a página de login
+            window.location.href = '/admin_login.html';
+        }
+    </script>
+</body>
+</html>

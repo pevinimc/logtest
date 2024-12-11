@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Administrativo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <!--CSS-->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/media.css">
+    <!--JS & jQuery-->
+    <script type="text/javascript" src="js/script.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="container">
+        <div class="banner">
+            <img src="img/login.png" alt="imagem-login">
+            <h1 align="center">Faça o login para obter acesso à <br>parte administrativa do site!<br>Boa sorte!</h1>
+        </div>
+
+        <div class="box-login">
+            <h1 class="texto-preto">Olá <br><br>Instrutor/Coordenador!</h1>
+
+            <div class="box">
+                <h2>Faça o login abaixo</h2>
+                <input type="text" name="usuario" id="usuario" placeholder="Usuário" required>
+                <input type="password" name="senha" id="senha" placeholder="Senha" required>
+
+                <!-- Link para recuperação do código de acesso -->
+                <a href="https://api.whatsapp.com/send/?phone=5567992362446&text=Olá%2C+eu+esqueci+meu+código+de+acesso+administrativo.+Consegue+verificar+para+mim%3F+Meu+nome+é%3A&type=phone_number&app_absent=0">
+                    <p>Esqueceu ou perdeu seu código de acesso?</p>
+                </a>
+
+                <!-- Botão de login -->
+                <button type="button" id="loginButton" class="mb-2 btn btn-primary">Entrar</button>
+
+                <a href="index.html">
+                    <p>Voltar</p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginButton').addEventListener('click', function() {
+            var usuario = document.getElementById('usuario').value.toLowerCase(); // Convertendo para minúsculas
+            var senha = document.getElementById('senha').value;
+
+            // Verifica se os campos não estão vazios
+            if (usuario === "" || senha === "") {
+                alert("Por favor, preencha todos os campos.");
+                return; // Se os campos estiverem vazios, sai da função
+            }
+
+            // Recupera o administrador salvo no localStorage (caso exista)
+            var adminUsuario = localStorage.getItem('admin_usuario');
+            var adminSenha = localStorage.getItem('admin_senha');
+
+            // Verifica se as credenciais do administrador estão corretas
+            if (usuario === adminUsuario && senha === adminSenha) {
+                // Salva as credenciais no localStorage
+                localStorage.setItem('admin_codigo', usuario);  // Salva o código de administrador
+                localStorage.setItem('admin_senha', senha);     // Salva a senha de administrador
+
+                alert("Login bem-sucedido!");
+                window.location.href = './painel/index.html';  // Redireciona para o painel administrativo
+            } else {
+                alert("Usuário ou senha incorretos.");
+            }
+        });
+    </script>
+</body>
+</html>

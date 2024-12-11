@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="css/painel.css">
+</head>
+<body>
+    <div id="menu-lateral">
+        <div class="logo">
+            <h2>Nome da Empresa</h2>
+        </div>
+        <ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="cadastro.html">Cadastro de Usuários</a></li>
+            <li><a href="index.html">Voltar</a></li>
+        </ul>
+    </div>
+    
+    <div id="conteudo-principal">
+        <header>
+            <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        </header>
+
+        <h1>Bem-vindo ao Dashboard!</h1>
+        <div class="card-container">
+            <div class="card">
+                <h3>Total de Usuários</h3>
+                <p id="total-usuarios">150</p>
+            </div>
+        </div>
+
+        <!-- Tabela para exibir a lista de usuários -->
+        <h2>Lista de Usuários</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Usuário</th>
+                    <th>Perfil</th>
+                </tr>
+            </thead>
+            <tbody id="usuarios-lista">
+                <!-- Lista de usuários será inserida aqui -->
+            </tbody>
+        </table>
+
+    </div>
+
+    <script>
+        // Função para controlar o menu lateral
+        function toggleMenu() {
+            document.getElementById('menu-lateral').classList.toggle('hidden');
+            document.getElementById('conteudo-principal').classList.toggle('menu-hidden');
+        }
+
+        // Função para carregar e listar os usuários
+        function listarUsuarios() {
+            var usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+
+            var tabela = document.getElementById('usuarios-lista');
+            tabela.innerHTML = ""; // Limpa a tabela antes de adicionar novos dados
+
+            // Atualiza o número total de usuários
+            document.getElementById('total-usuarios').textContent = usuarios.length;
+
+            usuarios.forEach(function(usuario) {
+                var tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${usuario.usuario}</td>
+                    <td>${usuario.perfil}</td>
+                `;
+                tabela.appendChild(tr);
+            });
+        }
+
+        // Carrega a lista de usuários assim que a página for carregada
+        window.onload = listarUsuarios;
+    </script>
+</body>
+</html>

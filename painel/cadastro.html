@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Usuários</title>
+    <link rel="stylesheet" href="css/painel.css">
+</head>
+<body>
+    <div id="menu-lateral">
+        <div class="logo">
+            <h2>Nome da Empresa</h2>
+        </div>
+        <ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="cadastro.html">Cadastro de Usuários</a></li>
+            <li><a href="index.html">Voltar</a></li>
+        </ul>
+    </div>
+
+    <div id="conteudo-principal">
+        <header>
+            <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        </header>
+
+        <h1>Cadastro de Novo Usuário</h1>
+        
+        <form id="formCadastro">
+            <label for="usuario">Usuário</label>
+            <input type="text" id="usuario" name="usuario" required>
+
+            <label for="senha">Senha</label>
+            <input type="password" id="senha" name="senha" required>
+
+            <label for="perfil">Perfil</label>
+            <select id="perfil" name="perfil">
+                <option value="admin">Instrutor/Coordenador</option>
+                <option value="user">Aluno</option>
+            </select>
+
+            <button type="submit">Cadastrar</button>
+        </form>
+
+        <h2>Usuários Cadastrados</h2>
+        <ul id="listaUsuarios"></ul> <!-- Lista de usuários cadastrados -->
+
+    </div>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById('menu-lateral').classList.toggle('hidden');
+            document.getElementById('conteudo-principal').classList.toggle('menu-hidden');
+        }
+
+        // Função para salvar o novo usuário no localStorage
+        document.getElementById('formCadastro').addEventListener('submit', function(event) {
+            event.preventDefault(); // Previne o envio do formulário
+
+            const usuario = document.getElementById('usuario').value;
+            const senha = document.getElementById('senha').value;
+            const perfil = document.getElementById('perfil').value;
+
+            // Recupera os usuários já cadastrados no localStorage
+            let usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+
+            // Verifica se o nome de usuário já existe
+            const usuarioExistente = usuarios.some(function(existingUser) {
+                return existingUser.usuario === usuario;
+            });
+
+            if (usuarioExistente) {
+                alert("Usuário já existe! Escolha outro nome.");
+                return;  // Não prossegue com o cadastro se o usuário já existir
+            }
+
+            // Cria um novo objeto de usuário
+            const novoUsuario = {
+                usuario: usuario,
+                senha: senha,
+                perfil: perfil
+            };
+
+            // Adiciona o novo usuário à lista
+            usuarios.push(novoUsuario);
+
+            // Salva a lista atualizada no localStorage
+            localStorage.setItem('usuarios', JSON.stringify(usuarios));
+
+            // Alerta que o cadastro foi realizado com sucesso
+            alert('Usuário cadastrado com sucesso!');
+
+            // Limpa os campos do formulário
+            document.getElementById('formCadastro').reset();
+
+            // Atualiza a lista de usuários cadastrados
+            listarUsuarios();
+        });
+
+        // Função para listar os usuários cadastrados
+        function listarUsuarios() {
+            let usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+            const listaUsuarios = document.getElementById('listaUsuarios');
+            listaUsuarios.innerHTML = ''; // Limpa a lista antes de atualizá-la
+
+            // Preenche a lista com os usuários cadastrados
+            usuarios.forEach(function(usuario, index) {
+                const li = document.createElement('li');
+                li.textContent = `${usuario.usuario} (${usuario.perfil})`;
+
+                // Cria o botão de exclusão
+                const btnExcluir = document.createElement('button');
+                btnExcluir.textContent = 'Excluir';
+                btnExcluir.onclick = function() {
+                    excluirUsuario(index); // Exclui o usuário ao clicar no botão
+                };
+
+                // Adiciona o botão de exclusão ao item da lista
+                li.appendChild(btnExcluir);
+                listaUsuarios.appendChild(li);
+            });
+        }
+
+        // Função para excluir o usuário
+        function excluirUsuario(index) {
+            let usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+
+            // Remove o usuário da lista
+            usuarios.splice(index, 1);
+
+            // Atualiza o localStorage com a lista modificada
+            localStorage.setItem('usuarios', JSON.stringify(usuarios));
+
+            // Atualiza a lista de usuários na tela
+            listarUsuarios();
+
+            alert('Usuário excluído com sucesso!');
+        }
+
+        // Atualiza a lista de usuários ao carregar a página
+        window.onload = listarUsuarios;
+    </script>
+</body>
+</html>

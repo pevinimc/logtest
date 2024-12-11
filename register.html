@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Administrador</title>
+
+    <!--CSS-->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/media.css">
+
+    <!--JS & jQuery-->
+    <script type="text/javascript" src="js/script.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="container">
+        <div class="banner">
+            <img src="img/login.png" alt="imagem-login">
+            <h1 align="center">Cadastro de Administrador do Site!<br>Boa sorte!</h1>
+        </div>
+
+        <div class="box-login">
+            <h1>Cadastro de Usuário</h1>
+
+            <div class="box">
+                <h2>Crie seu login</h2>
+                <input type="text" name="admin_codigo" id="admin_codigo" placeholder="Código de Administrador" required>
+                <input type="password" name="admin_senha" id="admin_senha" placeholder="Senha do Administrador" required>
+
+                <!-- Botão de cadastro -->
+                <button type="button" id="registerButton" class="mb-2 btn btn-primary">Cadastrar</button>
+
+                <a href="admin_login.html">
+                    <p>Já tem uma conta? Faça login!</p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Função para registrar o administrador
+        document.getElementById('registerButton').addEventListener('click', function() {
+            var admin_codigo = document.getElementById('admin_codigo').value;
+            var admin_senha = document.getElementById('admin_senha').value;
+
+            // Verifica se os campos não estão vazios
+            if (admin_codigo === "" || admin_senha === "") {
+                alert("Por favor, preencha todos os campos.");
+                return;
+            }
+
+            // Armazenando os dados no localStorage
+            localStorage.setItem('admin_codigo', admin_codigo);
+            localStorage.setItem('admin_senha', admin_senha);
+
+            alert("Usuário cadastrado com sucesso!");
+            window.location.href = 'admin_login.html';  // Redireciona para a página de login
+        });
+    </script>
+</body>
+</html>

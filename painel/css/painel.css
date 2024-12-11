@@ -1,0 +1,178 @@
+/* Estilos gerais */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    background-color: #f4f4f4;
+    height: 100vh;
+}
+
+/* Menu Lateral */
+#menu-lateral {
+    width: 250px;
+    background-color: #008c20;
+    color: #fff;
+    padding: 20px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transition: transform 0.3s ease-in-out;
+}
+
+#menu-lateral .logo h2 {
+    font-size: 1.8em;
+    text-align: center;
+    margin-bottom: 40px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+#menu-lateral ul {
+    list-style: none;
+    padding: 0;
+}
+
+#menu-lateral ul li {
+    margin: 20px 0;
+}
+
+#menu-lateral ul li a {
+    color: #ddd;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    font-weight: 600;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+#menu-lateral ul li a:hover {
+    background-color: #495057;
+}
+
+/* Conteúdo Principal */
+#conteudo-principal {
+    margin-left: 300px; /* Aumentado o espaço entre o menu e o conteúdo principal */
+    padding: 40px;
+    width: calc(100% - 300px); /* Ajustado para considerar o menu com 300px de largura */
+    transition: margin-left 0.3s ease-in-out;
+    background-color: #fff;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+header {
+    display: flex;
+    justify-content: flex-end;
+}
+
+button.menu-toggle {
+    background-color: #008c20;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+h1 {
+    color: #333;
+    font-size: 2em;
+    margin-bottom: 20px; /* Adiciona espaçamento inferior */
+}
+
+/* Cards no Dashboard */
+.card-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+
+.card {
+    background-color: #f8f9fa;
+    padding: 20px;
+    width: 30%;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-right: 20px; /* Adiciona um espaço entre os cards */
+}
+
+.card h3 {
+    color: #008c20;
+    font-size: 1.2em;
+}
+
+.card p {
+    font-size: 2em;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Formulário de Cadastro */
+form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 500px; /* Limita a largura do formulário */
+    margin-top: 20px;
+}
+
+label {
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #008c20;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px; /* Adiciona um espaço acima do botão */
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    #menu-lateral {
+        width: 200px;
+        transform: translateX(-100%);
+    }
+
+    #conteudo-principal {
+        margin-left: 0;
+        padding: 20px;
+    }
+
+    button.menu-toggle {
+        display: block;
+    }
+
+    #menu-lateral.hidden {
+        transform: translateX(-100%);
+    }
+
+    #conteudo-principal.menu-hidden {
+        margin-left: 0;
+    }
+
+    .card-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card {
+        width: 80%;
+        margin-bottom: 20px;
+    }
+}
