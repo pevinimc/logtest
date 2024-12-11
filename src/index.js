@@ -7,16 +7,32 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Middlewares
 app.use(express.json());
 
 const corsOptions = {
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 200 // Para lidar com alguns navegadores antigos
 };
 
+// Configuração CORS para todas as rotas
 app.use(cors(corsOptions));
 
+// Middleware para lidar com requisições de pré-voo
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200);
+  } else {
+    next();
+  }
+});
+
+// Conectar ao MongoDB
 const mongoURI = process.env.DATABASE_URL;
 
 console.log('DATABASE_URL:', mongoURI);
@@ -35,6 +51,7 @@ mongoose.connect(mongoURI, {
   console.error('Erro ao conectar ao MongoDB', err);
 });
 
+// Modelo de Usuário
 const userSchema = new mongoose.Schema({
   username: String,
   password: String,
@@ -43,7 +60,8 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-app.post('/register', cors(corsOptions), async (req, res) => {
+// Rota de Registro de Administrador
+app.post('/register', async (req, res) => {
   console.log('Body recebido no /register:', req.body);
   const { admin_codigo, admin_senha } = req.body;
 
@@ -66,7 +84,7 @@ app.post('/register', cors(corsOptions), async (req, res) => {
   }
 });
 
-app.post('/login', cors(corsOptions), async (req, res) => {
+app.post('/login', async (req, res) => {
   console.log('Body recebido no /login:', req.body);
   const { username, password } = req.body;
 
