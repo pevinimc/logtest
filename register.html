@@ -50,7 +50,8 @@
             }
 
             try {
-                const response = await fetch('https://logtes-99v1.onrender.com/register-admin', {
+                console.log('Enviando dados:', { admin_codigo, admin_senha });
+                const response = await fetch('https://logtes-99v1.onrender.com/register', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -58,11 +59,15 @@
                     body: JSON.stringify({ admin_codigo, admin_senha })
                 });
 
+                console.log('Response Status:', response.status);
+                console.log('Response:', response);
+
                 if (response.ok) {
                     alert("Administrador cadastrado com sucesso!");
                     window.location.href = 'admin_login.html';
                 } else {
                     const errorData = await response.json();
+                    console.log('Erro no registro:', errorData);
                     alert(`Erro: ${errorData}`);
                 }
             } catch (error) {
