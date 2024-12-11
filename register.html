@@ -40,23 +40,35 @@
     </div>
 
     <script>
-        // Função para registrar o administrador
-        document.getElementById('registerButton').addEventListener('click', function() {
+        document.getElementById('registerButton').addEventListener('click', async function() {
             var admin_codigo = document.getElementById('admin_codigo').value;
             var admin_senha = document.getElementById('admin_senha').value;
 
-            // Verifica se os campos não estão vazios
             if (admin_codigo === "" || admin_senha === "") {
                 alert("Por favor, preencha todos os campos.");
                 return;
             }
 
-            // Armazenando os dados no localStorage
-            localStorage.setItem('admin_codigo', admin_codigo);
-            localStorage.setItem('admin_senha', admin_senha);
+            try {
+                const response = await fetch('https://logtes-99v1.onrender.com/register-admin', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ admin_codigo, admin_senha })
+                });
 
-            alert("Usuário cadastrado com sucesso!");
-            window.location.href = 'admin_login.html';  // Redireciona para a página de login
+                if (response.ok) {
+                    alert("Administrador cadastrado com sucesso!");
+                    window.location.href = 'admin_login.html';
+                } else {
+                    const errorData = await response.json();
+                    alert(`Erro: ${errorData}`);
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert("Ocorreu um erro ao tentar cadastrar o administrador. Por favor, tente novamente.");
+            }
         });
     </script>
 </body>
