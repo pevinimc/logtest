@@ -7,32 +7,20 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middlewares
 app.use(express.json());
 
-// Configuração de CORS
 const corsOptions = {
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  optionsSuccessStatus: 200
+  allowedHeaders: ['Content-Type', 'Authorization']
 };
 
 app.use(cors(corsOptions));
 
 // Middleware para lidar com requisições de pré-voo
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  if (req.method === 'OPTIONS') {
-    res.sendStatus(200);
-  } else {
-    next();
-  }
-});
+app.options('*', cors(corsOptions));
 
-// Rota de saúde
+// Rota de saúde para verificar a API
 app.get('/health', (req, res) => {
   res.status(200).send('API está funcionando corretamente');
 });
@@ -64,7 +52,8 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-app.post('/register', async (req, res) => {
+// Rota de Registro de Administrador
+app.post('/register', cors(corsOptions), async (req, res) => {
   console.log('Body recebido no /register:', req.body);
   const { admin_codigo, admin_senha } = req.body;
 
@@ -88,11 +77,11 @@ app.post('/register', async (req, res) => {
 });
 
 // Rota de Login
-app.post('/login', async (req, res) => {
+app.post('/login', cors(corsOptions), async (req, res) => {
   console.log('Body recebido no /login:', req.body);
   const { username, password } = req.body;
 
-  if (!username || !password) {
+  if (!username ou !password) {
     console.error('Campos obrigatórios faltando no /login.');
     return res.status(400).send('Campos obrigatórios faltando.');
   }
