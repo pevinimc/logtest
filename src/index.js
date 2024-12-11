@@ -45,6 +45,7 @@ app.post('/register', async (req, res) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
+    console.error('Campos obrigatórios faltando no /register.');
     return res.status(400).send('Campos obrigatórios faltando.');
   }
 
@@ -54,8 +55,10 @@ app.post('/register', async (req, res) => {
 
   try {
     await newUser.save();
+    console.log('Usuário registrado com sucesso:', newUser);
     res.status(201).send('Usuário registrado com sucesso!');
   } catch (err) {
+    console.error('Erro ao registrar usuário:', err);
     res.status(500).send('Erro ao registrar usuário.');
   }
 });
@@ -66,22 +69,33 @@ app.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
+    console.error('Campos obrigatórios faltando no /login.');
     return res.status(400).send('Campos obrigatórios faltando.');
   }
 
-  const user = await User.findOne({ username });
+  try {
+    const user = await User.findOne({ username });
+    console.log('Usuário encontrado:', user);
 
-  if (!user) {
-    return res.status(400).send('Usuário não encontrado.');
+    if (!user) {
+      console.error('Usuário não encontrado.');
+      return res.status(400).send('Usuário não encontrado.');
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    console.log('Resultado da comparação de senha:', isMatch);
+
+    if (!isMatch) {
+      console.error('Senha incorreta.');
+      return res.status(400).send('Senha incorreta.');
+    }
+
+    console.log('Login bem-sucedido.');
+    res.status(200).send('Login bem-sucedido!');
+  } catch (err) {
+    console.error('Erro ao processar login:', err);
+    res.status(500).send('Erro ao processar login.');
   }
-
-  const isMatch = await bcrypt.compare(password, user.password);
-
-  if (!isMatch) {
-    return res.status(400).send('Senha incorreta.');
-  }
-
-  res.status(200).send('Login bem-sucedido!');
 });
 
 app.listen(PORT, () => {
