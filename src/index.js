@@ -1,27 +1,25 @@
-require('dotenv').config(); // Carrega variáveis de ambiente do arquivo .env
-
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const cors = require('cors'); // Adicionando o pacote CORS
+const cors = require('cors');
 
-const app = express(); // Definindo a variável 'app'
+const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middlewares
 app.use(express.json());
 
-// Configuração Específica de CORS para todas as rotas
-app.use(cors({
+const corsOptions = {
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
-}));
+};
 
-// Conectar ao MongoDB
+app.use(cors(corsOptions));
+
 const mongoURI = process.env.DATABASE_URL;
 
-console.log('DATABASE_URL:', mongoURI); // Log para verificar a variável de ambiente
+console.log('DATABASE_URL:', mongoURI);
 
 if (!mongoURI) {
   console.error('A variável DATABASE_URL não está definida no arquivo .env.');
@@ -37,7 +35,6 @@ mongoose.connect(mongoURI, {
   console.error('Erro ao conectar ao MongoDB', err);
 });
 
-// Modelo de Usuário
 const userSchema = new mongoose.Schema({
   username: String,
   password: String,
@@ -46,9 +43,8 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-// Rota de Registro de Administrador com CORS
 app.post('/register', cors(corsOptions), async (req, res) => {
-  console.log('Body recebido no /register:', req.body); // Log para verificar o corpo da requisição
+  console.log('Body recebido no /register:', req.body);
   const { admin_codigo, admin_senha } = req.body;
 
   if (!admin_codigo || !admin_senha) {
@@ -70,9 +66,8 @@ app.post('/register', cors(corsOptions), async (req, res) => {
   }
 });
 
-// Rota de Login com CORS
 app.post('/login', cors(corsOptions), async (req, res) => {
-  console.log('Body recebido no /login:', req.body); // Log para verificar o corpo da requisição
+  console.log('Body recebido no /login:', req.body);
   const { username, password } = req.body;
 
   if (!username || !password) {
