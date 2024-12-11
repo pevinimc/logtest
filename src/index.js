@@ -11,13 +11,12 @@ const PORT = process.env.PORT || 3000;
 // Middlewares
 app.use(express.json());
 
-// Configuração Específica de CORS
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  next();
-});
+// Configuração Específica de CORS para todas as rotas
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // Conectar ao MongoDB
 const mongoURI = process.env.DATABASE_URL;
@@ -42,13 +41,13 @@ mongoose.connect(mongoURI, {
 const userSchema = new mongoose.Schema({
   username: String,
   password: String,
-  profile: { type: String, default: 'user' } // Adicionando perfil de usuário
+  profile: { type: String, default: 'user' }
 });
 
 const User = mongoose.model('User', userSchema);
 
-// Rota de Registro de Administrador
-app.post('/register', async (req, res) => {
+// Rota de Registro de Administrador com CORS
+app.post('/register', cors(corsOptions), async (req, res) => {
   console.log('Body recebido no /register:', req.body); // Log para verificar o corpo da requisição
   const { admin_codigo, admin_senha } = req.body;
 
@@ -71,8 +70,8 @@ app.post('/register', async (req, res) => {
   }
 });
 
-// Rota de Login
-app.post('/login', async (req, res) => {
+// Rota de Login com CORS
+app.post('/login', cors(corsOptions), async (req, res) => {
   console.log('Body recebido no /login:', req.body); // Log para verificar o corpo da requisição
   const { username, password } = req.body;
 
