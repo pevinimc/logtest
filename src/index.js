@@ -1,3 +1,5 @@
+require('dotenv').config(); // Carrega variáveis de ambiente do arquivo .env
+
 const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
@@ -33,18 +35,18 @@ mongoose.connect(mongoURI, {
 const userSchema = new mongoose.Schema({
   username: String,
   password: String,
-  profile: { type: String, default: 'user' } // Adicionando perfil de usuário
+  profile: { type: String, default: 'user' }
 });
 
 const User = mongoose.model('User', userSchema);
 
 // Rota de Registro de Administrador
-app.post('/register-admin', async (req, res) => {
-  console.log('Body recebido no /register-admin:', req.body); // Log para verificar o corpo da requisição
+app.post('/register', async (req, res) => {
+  console.log('Body recebido no /register:', req.body); // Log para verificar o corpo da requisição
   const { admin_codigo, admin_senha } = req.body;
 
   if (!admin_codigo || !admin_senha) {
-    console.error('Campos obrigatórios faltando no /register-admin.');
+    console.error('Campos obrigatórios faltando no /register.');
     return res.status(400).send('Campos obrigatórios faltando.');
   }
 
