@@ -7,7 +7,6 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middlewares
 app.use(express.json());
 
 const corsOptions = {
@@ -17,7 +16,6 @@ const corsOptions = {
   optionsSuccessStatus: 200 // Para lidar com alguns navegadores antigos
 };
 
-// Configuração CORS para todas as rotas
 app.use(cors(corsOptions));
 
 // Middleware para lidar com requisições de pré-voo
@@ -30,6 +28,11 @@ app.use((req, res, next) => {
   } else {
     next();
   }
+});
+
+// Rota de saúde para teste
+app.get('/health', (req, res) => {
+  res.status(200).send('API está funcionando corretamente');
 });
 
 // Conectar ao MongoDB
@@ -51,7 +54,6 @@ mongoose.connect(mongoURI, {
   console.error('Erro ao conectar ao MongoDB', err);
 });
 
-// Modelo de Usuário
 const userSchema = new mongoose.Schema({
   username: String,
   password: String,
@@ -60,7 +62,6 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-// Rota de Registro de Administrador
 app.post('/register', async (req, res) => {
   console.log('Body recebido no /register:', req.body);
   const { admin_codigo, admin_senha } = req.body;
