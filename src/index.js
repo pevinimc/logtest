@@ -35,7 +35,7 @@ mongoose.connect(mongoURI, {
 const userSchema = new mongoose.Schema({
   username: String,
   password: String,
-  profile: { type: String, default: 'user' }
+  profile: { type: String, default: 'user' } // Adicionando perfil de usuário
 });
 
 const User = mongoose.model('User', userSchema);
@@ -64,7 +64,40 @@ app.post('/register', async (req, res) => {
   }
 });
 
-// Rotas existentes (login e registro de usuário)...
+// Rota de Login
+app.post('/login', async (req, res) => {
+  console.log('Body recebido no /login:', req.body); // Log para verificar o corpo da requisição
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+    console.error('Campos obrigatórios faltando no /login.');
+    return res.status(400).send('Campos obrigatórios faltando.');
+  }
+
+  try {
+    const user = await User.findOne({ username });
+    console.log('Usuário encontrado:', user);
+
+    if (!user) {
+      console.error('Usuário não encontrado.');
+      return res.status(400).send('Usuário não encontrado.');
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    console.log('Resultado da comparação de senha:', isMatch);
+
+    if (!isMatch) {
+      console.error('Senha incorreta.');
+      return res.status(400).send('Senha incorreta.');
+    }
+
+    console.log('Login bem-sucedido.');
+    res.status(200).send('Login bem-sucedido!');
+  } catch (err) {
+    console.error('Erro ao processar login:', err);
+    res.status(500).send('Erro ao processar login.');
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
